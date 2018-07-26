@@ -52,5 +52,11 @@
 ```
 >注意: 当调用订阅操作（即调用Observable.subscribe()方法）的时候，被观察者才真正开始发出事件。
 
+## RxJava原理解析
+相关文章 
+https://gank.io/post/560e15be2dca930e00da1083 (必看)
+https://www.jianshu.com/p/e61e1307e538
+
+## RxJava调用顺序
 
 
