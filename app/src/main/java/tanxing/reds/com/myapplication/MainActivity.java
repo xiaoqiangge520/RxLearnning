@@ -7,7 +7,6 @@ import android.util.Log;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -53,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<Bitmap>() {
                     @Override
                     public void onCompleted() {
