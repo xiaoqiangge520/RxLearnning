@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
         //线程切换
         ThreadChange();
+
+        //rxjava基本原理及调用顺序
+        rxJavaPrinciple();
     }
 
     /**
@@ -66,6 +69,64 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Bitmap bitmap) {
                         Log.e("TAG", "onNext: thread" + Thread.currentThread().getName());
+                    }
+                });
+    }
+
+    /**
+     * RxJava 原理及调用顺序
+     * 按照文章顺序阅读 :
+     * https://www.jianshu.com/p/e61e1307e538
+     * https://www.jianshu.com/p/88aacbed8aa5
+     */
+    private void rxJavaPrinciple() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                Log.e("RX", "create  call:");
+                subscriber.onNext("10");
+                subscriber.onNext("0");
+                subscriber.onNext("5");
+                subscriber.onCompleted();
+            }
+        })
+                .filter(new Func1<String, Boolean>() {
+                    @Override
+                    public Boolean call(String s) {
+                        Log.e("RX", "filter Func1 call:" + s);
+                        return s.equals("0");
+                    }
+                })
+                .map(new Func1<String, Integer>() {
+                    @Override
+                    public Integer call(String s) {
+                        Log.e("RX", "map Func1 call:");
+                        return Integer.valueOf(s);
+                    }
+                })
+//                .doOnSubscribe(new Action0() {
+//                    @Override
+//                    public void call() {
+//                        Log.e("RX", "doOnSubscribe call:");
+//                    }
+//                })
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(Schedulers.newThread())
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        Log.e("RX", "Subscriber onNext" + integer);
                     }
                 });
     }
