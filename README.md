@@ -2,7 +2,6 @@
 
 -------------------
 
-[TOC]
 
 ## RxJava调度线程的切换
 
@@ -10,11 +9,11 @@
 >决定上游事件操作所处的线程与调用的位置无关，而且多次调用只有第一次调用时会指定Observable自己在哪个调度器执行。  
 >若线程切换只设置SubscribeOn,则决定上下游事件处理的整个线程,例如设置subscribeOn(Schedulers.newThread())则上下游均在新线程中执行(详情见Demo)
 >SubscribeOn不仅可以指定Observable自身的调度器，也可以指定DoOnSubscribe执行的调度器。
->
-ObserveOn操作符
-决定下游事件操作所处的线程
-ObserveOn多次调用只有最后一次有效
-若线程切换只设置ObserveOn,则上游事件默认是在主线程执行,ObserveOn决定下游事件所处的线程
+
+>ObserveOn操作符
+>决定下游事件操作所处的线程
+>ObserveOn多次调用只有最后一次有效
+>若线程切换只设置ObserveOn,则上游事件默认是在主线程执行,ObserveOn决定下游事件所处的线程
 
 >注意: 当调用订阅操作（即调用Observable.subscribe()方法）的时候，被观察者才真正开始发出事件。
 
@@ -54,7 +53,6 @@ ObserveOn多次调用只有最后一次有效
     }
 ```
 
-## RxJava操作符
 
 
 
