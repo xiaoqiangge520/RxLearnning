@@ -12,41 +12,4 @@ ObserveOn操作符
 ObserveOn多次调用只有最后一次有效
 若线程切换只设置ObserveOn,则上游事件默认是在主线程执行,ObserveOn决定下游事件所处的线程
 
-Observable.just("1")
-                .map(new Func1<String, Bitmap>() {
-                    @Override
-                    public Bitmap call(String s) {
-                        Log.e("TAG", "call: thread" + Thread.currentThread().getName());
-                        return null;
-                    }
-                })
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        Log.e("TAG", "call: thread" + Thread.currentThread().getName());
-                    }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<Bitmap>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Bitmap bitmap) {
-                        Log.e("TAG", "onNext: thread" + Thread.currentThread().getName());
-                    }
-                });
-                
 注意: 当调用订阅操作（即调用Observable.subscribe()方法）的时候，被观察者才真正开始发出事件。
-
-
-
-
