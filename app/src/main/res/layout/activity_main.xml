@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:src="@mipmap/mv"
