@@ -30,25 +30,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView.setOnClickListener(this);
 
         //线程切换
-        ThreadChange();
+//        ThreadChange();
 
         //操作符
 //        rxFlatmap();
 
         //lift调用原理
 //        rxLift();
+
+        //背压
+        rxBackPressure();
     }
 
-    /**
-     * SubscribeOn这个操作符，决定上游事件操作所处的线程
-     * 与调用的位置无关，而且多次调用只有第一次调用时会指定Observable自己在哪个调度器执行。
-     * 若线程切换只设置SubscribeOn,则决定上下游事件处理的整个线程,例如设置subscribeOn(Schedulers.newThread())则上下游均在新线程中执行
-     * SubscribeOn不仅可以指定Observable自身的调度器，也可以指定DoOnSubscribe执行的调度器。
-     * <p>
-     * ObserveOn这个操作符，决定下游事件操作所处的线程
-     * ObserveOn多次调用只有最后一次有效
-     * 若线程切换只设置ObserveOn,则上游事件默认是在主线程执行,ObserveOn决定下游事件所处的线程
-     */
     private void ThreadChange() {
         Observable.just("1", "2", "3")
                 .doOnSubscribe(new Action0() {
@@ -205,6 +198,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 });
+    }
+
+    private void rxBackPressure() {
+        //被观察者将产生100000个事件
+        Observable observable = Observable.range(1, 100000);
+
+
+        observable.observeOn(Schedulers.newThread())
+                .subscribe(new MySubscriber());
+    }
+
+    class MySubscriber extends Subscriber<Object> {
+        @Override
+        public void onStart() {
+            //一定要在onStart中通知被观察者先发送一个事件
+            request(1);
+        }
+
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+        }
+
+        @Override
+        public void onNext(Object n) {
+            //处理完毕之后，在通知被观察者发送下一个事件
+            request(1);
+        }
     }
 
     class Student {
